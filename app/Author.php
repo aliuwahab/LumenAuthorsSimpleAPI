@@ -23,6 +23,7 @@ class Author extends Model
 
     public static $rules = [
         'name' => 'required|max:255',
+        'email' => 'required|email',
         'gender' => 'required|max:255|in:male,female',
         'country' => 'required|max:255',
     ];
