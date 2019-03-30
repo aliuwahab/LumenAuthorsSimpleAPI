@@ -34,6 +34,19 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        return parent::report($exception);
+    }
+
+    /**
+     * Render an exception into an HTTP response for api request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception  $exception
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
+    public function render($request, Exception $exception)
+    {
+
         if ($exception instanceof HttpException) {
             $code = $exception->getStatusCode();
             $message = Response::$statusTexts[$code];
@@ -66,22 +79,11 @@ class Handler extends ExceptionHandler
 
 
         if (env('APP_DEBUG', false)) {
-            return parent::report($exception);
+            return parent::render($request, $exception);
         }
 
         return $this->errorResponse('Unexpected error, Try later', Response::HTTP_UNPROCESSABLE_ENTITY);
 
-    }
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    public function render($request, Exception $exception)
-    {
-        return parent::render($request, $exception);
     }
 }
